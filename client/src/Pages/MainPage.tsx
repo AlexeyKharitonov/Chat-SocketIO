@@ -1,7 +1,6 @@
-import { FC } from "react";
-import NicknameForm from "../Components/UI/NicknameForm";
+import { NicknameForm } from "../Components/UI/NicknameForm";
 
-const MainPage: FC = () => {
+const MainPage = () => {
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       <div className="flex flex-1 items-center justify-center p-4">

@@ -1,19 +1,16 @@
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllMessages } from "../../../Redux/Messages/Messages";
-import { RootState } from "../../../Redux/CreateStore";
-import { useSortMessages } from "../../../Hooks/UseSortMessages";
-import { displayDate } from "../../../Utils/DisplayDate";
-// import InfiniteScroll from "react-infinite-scroll-component";
-import DropDownSort from "../DropDownSort/DropDownSort";
-import { completionOfWord } from "../../../Utils/CompletionOfWord";
-import Button from "../../Common/Button";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../../Redux/CreateStore";
+import { getAllMessages } from "../../../Redux/Messages/Messages";
 import { userLogout } from "../../../Redux/Users/Users";
+import { useSortMessages } from "../../../Hooks/UseSortMessages";
+import { DropDownSort } from "../DropDownSort";
+import { displayDate } from "../../../Utils/DisplayDate";
+import { completionOfWord } from "../../../Utils/CompletionOfWord";
+import { Button } from "../../Common/Button";
 
-const Messages: FC = () => {
-  // const dispatch = useDispatch();
-
+const ChatMessages = () => {
   const messages = useSelector(getAllMessages());
   const currentUser = useSelector(
     (state: RootState) => state.users.currentUser
@@ -34,15 +31,6 @@ const Messages: FC = () => {
     dispatch(userLogout());
     navigate("/");
   };
-
-  // const getNewMessages = (): void => null;
-
-  // const fetchMoreData = () => {
-  //   const newMessages = getNewMessages();
-  //   newMessages.forEach((message) => {
-  //     dispatch(addMessage(message));
-  //   });
-  // };
 
   return (
     <>
@@ -73,12 +61,6 @@ const Messages: FC = () => {
             </p>
           </div>
         ) : (
-          // <InfiniteScroll
-          //   dataLength={sortedMessages?.length}
-          //   next={fetchMoreData}
-          //   hasMore={true}
-          //   loader={<h4>Loading...</h4>}
-          // >
           <>
             {sortedMessages?.map((message) => (
               <div
@@ -103,11 +85,10 @@ const Messages: FC = () => {
               </div>
             ))}
           </>
-          // </InfiniteScroll>
         )}
       </div>
     </>
   );
 };
 
-export default Messages;
+export { ChatMessages };

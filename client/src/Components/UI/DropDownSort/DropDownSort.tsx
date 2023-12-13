@@ -1,11 +1,11 @@
-import React, { useState, Fragment, useEffect } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { Dialog, Transition, RadioGroup } from "@headlessui/react";
 import { SortModalProps } from "./DropDownSort.type";
 import { options } from "../../../Constants";
 import { FaCheck } from "react-icons/fa";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-const DropDownSort: React.FC<SortModalProps> = ({ setSortType }) => {
+const DropDownSort = ({ setSortType }: SortModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(options[0]);
 
@@ -110,4 +110,4 @@ const DropDownSort: React.FC<SortModalProps> = ({ setSortType }) => {
   );
 };
 
-export default DropDownSort;
+export { DropDownSort };

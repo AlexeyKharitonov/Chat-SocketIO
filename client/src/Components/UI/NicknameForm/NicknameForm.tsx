@@ -1,15 +1,13 @@
-import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { nanoid } from "nanoid";
-import { addUser, setCurrentUser } from "../../Redux/Users/Users";
-import { IUser, formData } from "../../Types/index";
-import { trimString } from "../../Utils/trimString";
-import Button from "../Common/Button";
+import { addUser, setCurrentUser } from "../../../Redux/Users/Users";
+import { IUser, formData } from "../../../Types/index";
+import { Button } from "../../Common/Button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { MAINROOM, nicknameFormRules } from "../../Constants";
+import { MAINROOM, nicknameFormRules } from "../../../Constants";
 
-const NicknameForm: FC = () => {
+const NicknameForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,7 +22,7 @@ const NicknameForm: FC = () => {
   const onSubmit: SubmitHandler<formData> = (data: formData) => {
     const user: IUser = {
       id: nanoid(),
-      nickName: trimString(data.nickName),
+      nickName: data.nickName.trim(),
     };
     dispatch(addUser(user));
     dispatch(setCurrentUser(user));
@@ -62,4 +60,4 @@ const NicknameForm: FC = () => {
   );
 };
 
-export default NicknameForm;
+export { NicknameForm };

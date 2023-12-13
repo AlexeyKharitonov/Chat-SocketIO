@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../CreateStore";
 import { IMessage } from "../../Types";
 import { MessagesState } from "./Messages.type";
-import { localStorageService } from "../../LocalStorageService/LocalStorageService";
+import { localStorageService } from "../../LocalStorageService";
 
 const initialState: MessagesState = {
   messages: localStorageService.getAllMessages() || [],

@@ -1,19 +1,18 @@
-import { FC, useState } from "react";
-import { IMessage } from "../../Types";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../Redux/CreateStore";
-import { trimString } from "../../Utils/trimString";
+import { RootState } from "../../../Redux/CreateStore";
 import io from "socket.io-client";
-import configFile from "..//../config.json";
-import { addMessage } from "../../Redux/Messages/Messages";
-import Button from "../Common/Button";
-import { IoSend } from "react-icons/io5";
+import configFile from "../../../config.json";
+import { IMessage } from "../../../Types";
+import { addMessage } from "../../../Redux/Messages/Messages";
+import { Button } from "../../Common/Button";
 import EmojiPicker from "emoji-picker-react";
-import Emojiicon from "../../Images/emoji.svg";
+import Emojiicon from "../../../Images/emoji.svg";
+import { IoSend } from "react-icons/io5";
 
 const socket = io(configFile.apiEndpoint);
 
-const SendMessageForm: FC = () => {
+const SendMessageForm = () => {
   const dispatch = useDispatch();
   const [messageContent, setMessageContent] = useState("");
   const [isOpen, setOpen] = useState(false);
@@ -35,7 +34,7 @@ const SendMessageForm: FC = () => {
     event.preventDefault();
     if (currentUser) {
       const message: IMessage = {
-        content: trimString(messageContent),
+        content: messageContent.trim(),
         sender: currentUser,
         timestamp: Date.now(),
       };
@@ -56,7 +55,7 @@ const SendMessageForm: FC = () => {
               value={messageContent}
               onChange={({ target: { value } }) => setMessageContent(value)}
               placeholder="Написать сообщение..."
-              className="w-full px-6 py-4 pl-10 rounded-2xl bg-[#232323] text-[#8A8A8A] font-semibold text-base outline-none resize-none"
+              className="textarea-scroll w-full px-6 py-4 pl-10 rounded-2xl bg-[#232323] text-[#8A8A8A] font-semibold text-base outline-none textarea-placeholder resize-none"
               rows={1}
             />
             <div className="absolute top-1/2 transform -translate-y-1/2 right-4 cursor-pointer">
@@ -90,4 +89,4 @@ const SendMessageForm: FC = () => {
   );
 };
 
-export default SendMessageForm;
+export { SendMessageForm };

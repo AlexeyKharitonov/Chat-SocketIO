@@ -1,7 +1,6 @@
-import { FC } from "react";
 import { ButtonProps } from "./Button.type";
 
-const Button: FC<ButtonProps> = ({ classes, handleClick, children }) => {
+const Button = ({ classes, handleClick, children }: ButtonProps) => {
   const defaultBtnStyles =
     "flex justify-center items-center text-base font-semibold px-5 py-3 rounded-2xl transition-colors";
 
@@ -12,4 +11,4 @@ const Button: FC<ButtonProps> = ({ classes, handleClick, children }) => {
   );
 };
 
-export default Button;
+export { Button };

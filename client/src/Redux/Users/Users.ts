@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUser } from "../../Types";
 import { UsersState } from "./Users.type";
-import { localStorageService } from "../../LocalStorageService/LocalStorageService";
+import { localStorageService } from "../../LocalStorageService";
 
 const initialState: UsersState = {
   users: localStorageService.getAllUsers() || [],
