@@ -22,3 +22,8 @@ body {
 .scroll-container::-webkit-scrollbar-thumb:hover {
   background: #7a7aff;
 }
+
+/* для прозрачности placeholder в input для отправки сообщений */
+.input-placeholder::placeholder {
+  opacity: 0.5;
+}

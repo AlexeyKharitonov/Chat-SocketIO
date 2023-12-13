@@ -51,12 +51,14 @@ const Messages: FC = () => {
           <DropDownSort setSortType={setSortedType} />
           <span className="text-[#8A8A8A] text-2xl ">
             В чате сейчас {""}
-            <span className="text-[#6968FF]">
+            <span className="text-[#6968FF] ">
               {completionOfWord(users.length)}
             </span>
           </span>
           <Button
-            classes={"bg-buttonColor hover:bg-buttonHover text-buttonTextColor"}
+            classes={
+              "bg-buttonColor hover:bg-buttonHover text-lg text-buttonTextColor "
+            }
             handleClick={handleClick}
           >
             Выйти из чата

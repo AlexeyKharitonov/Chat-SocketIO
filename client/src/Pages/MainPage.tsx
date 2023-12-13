@@ -16,7 +16,7 @@ const MainPage: FC = () => {
         <img
           src="/iPhone.jpg"
           alt="iPhone"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute opacity-80 inset-0 w-full h-full object-cover"
         />
       </div>
     </div>

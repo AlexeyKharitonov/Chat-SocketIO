@@ -60,7 +60,7 @@ const DropDownSort: React.FC<SortModalProps> = ({ setSortType }) => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="fixed inset-0 flex justify-start items-start p-4">
-                <Dialog.Panel className="mt-16 ml-64 max-w-md transform overflow-hidden rounded-2xl bg-[#232323] p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="mt-16 ml-[262px] max-w-md transform overflow-hidden rounded-2xl bg-[#232323] p-6 text-left align-middle shadow-xl transition-all">
                   <RadioGroup
                     value={selectedOption}
                     onChange={handleSortChange}
@@ -89,7 +89,7 @@ const DropDownSort: React.FC<SortModalProps> = ({ setSortType }) => {
                                   {checked && (
                                     <FaCheck
                                       className="ml-3 shrink-0 text-[#232323] "
-                                      size={22}
+                                      size={18}
                                     />
                                   )}
                                 </div>
