@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
   registerChatHandlers(io, socket);
 });
 
-const PORT = 8080;
-server.listen(PORT || 8080, (): void => {
+const PORT = 8081;
+server.listen(PORT || 8081, (): void => {
   console.log(`Server has been started on port ${PORT}`);
 });

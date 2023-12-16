@@ -17,8 +17,8 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
     registerChatHandlers(io, socket);
 });
-const PORT = 8080;
-server.listen(PORT || 8080, () => {
+const PORT = 8081;
+server.listen(PORT || 8081, () => {
     console.log(`Server has been started on port ${PORT}`);
 });
 //# sourceMappingURL=index.js.map
