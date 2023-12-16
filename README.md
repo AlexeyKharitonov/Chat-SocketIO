@@ -2,7 +2,7 @@
 
 1. Склонировать репозиторий проекта по ссылке https://github.com/AlexeyKharitonov/Chat-SocketIO на свой компьютер.
 ```
-https://github.com/AlexeyKharitonov/Chat-SocketIO.git
+git clone https://github.com/AlexeyKharitonov/Chat-SocketIO.git
 ```
 
 2. Открыть терминал (или командную строку) и перейти в корневую директорию проекта.
