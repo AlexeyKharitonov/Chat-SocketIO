@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../Redux/CreateStore";
 import io from "socket.io-client";
 import configFile from "../../../config.json";
 import { IMessage } from "../../../Types";
-import { addMessage } from "../../../Redux/Messages/Messages";
+import { addMessage } from "../../../Redux/Messages";
 import { Button } from "../../Common/Button";
 import EmojiPicker from "emoji-picker-react";
+import { EmojiObject, MyEvent } from "./SendMessageForm.type";
 import Emojiicon from "../../../Images/emoji.svg";
 import { IoSend } from "react-icons/io5";
 
@@ -21,16 +22,12 @@ const SendMessageForm = () => {
     (state: RootState) => state.users.currentUser
   );
 
-  interface EmojiObject {
-    emoji: string;
-  }
-
   const onEmojiClick = ({ emoji }: EmojiObject): void => {
     setMessageContent((prevContent) => `${prevContent} ${emoji}`);
     setOpen(false);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: MyEvent) => {
     event.preventDefault();
     if (currentUser) {
       const message: IMessage = {
@@ -46,6 +43,23 @@ const SendMessageForm = () => {
     setMessageContent("");
   };
 
+  useEffect(() => {
+    socket.on("chat message", (message) => {
+      dispatch(addMessage(message));
+    });
+
+    return () => {
+      socket.off("chat message");
+    };
+  }, [dispatch]);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmit(event as React.KeyboardEvent<HTMLTextAreaElement>);
+    }
+  };
+
   return (
     <div className="px-4 py-1 space-x-3">
       <form onSubmit={handleSubmit} className="flex w-full gap-4">
@@ -57,6 +71,7 @@ const SendMessageForm = () => {
               placeholder="Написать сообщение..."
               className="textarea-scroll w-full px-6 py-4 pl-10 rounded-2xl bg-[#232323] text-[#8A8A8A] font-semibold text-base outline-none textarea-placeholder resize-none"
               rows={1}
+              onKeyDown={handleKeyDown}
             />
             <div className="absolute top-1/2 transform -translate-y-1/2 right-4 cursor-pointer">
               <img

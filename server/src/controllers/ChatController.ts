@@ -6,12 +6,16 @@ export const users: User[] = [];
 export const messages: Message[] = [];
 
 export const registerChatHandlers = (io: Server, socket: Socket) => {
-  console.log(`Пользователь подключен: ${socket.id}`);
+  socket.on("new_user", (user) => {
+    const userWithSocketId = { ...user, socketId: socket.id };
 
-  socket.on("new_user", (name: string) => {
-    const user: User = { id: socket.id, name };
-    users.push(user);
-    console.log(`Новый пользователь: ${name}`);
+    // users.push(user);
+    users.push(userWithSocketId);
+    io.emit("update_users", users);
+  });
+
+  socket.on("chat message", (message) => {
+    socket.broadcast.emit("chat message", message);
   });
 
   socket.on("send_message", (content: string) => {
@@ -28,11 +32,12 @@ export const registerChatHandlers = (io: Server, socket: Socket) => {
     }
   });
 
-  socket.on("disconnect", () => {
-    console.log(`Пользователь отключен: ${socket.id}`);
-    const index = users.findIndex((user) => user.id === socket.id);
+  socket.on("user_logout", (nickName) => {
+    const index = users.findIndex((user) => user.nickName === nickName);
+
     if (index !== -1) {
       users.splice(index, 1);
+      io.emit("update_users", users);
     }
   });
 };

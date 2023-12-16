@@ -8,8 +8,6 @@ const initialState: MessagesState = {
   messages: localStorageService.getAllMessages() || [],
 };
 
-console.log(localStorageService.getAllMessages());
-
 const messagesSlice = createSlice({
   name: "messages",
   initialState,

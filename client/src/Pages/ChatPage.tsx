@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import io from "socket.io-client";
-import configFile from "../config.json";
 import { ChatMessages } from "../Components/UI/ChatMessages";
 import { SendMessageForm } from "../Components/UI/SendMessageForm";
+import configFile from "../config.json";
 
 const socket = io(configFile.apiEndpoint);
 

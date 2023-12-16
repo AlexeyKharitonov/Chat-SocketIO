@@ -25,6 +25,9 @@ const addUser = (user: IUser): void => {
   }
 };
 
+const updatedUsers = (updateUsers: IUser[]) =>
+  localStorage.setItem(USERS_IN_CHAT, JSON.stringify(updateUsers));
+
 const getAllMessages = (): IMessage[] | null | undefined => {
   const messagesJson = localStorage.getItem(MESSAGES_IN_CHAT);
   if (messagesJson) {
@@ -64,6 +67,7 @@ export const localStorageService = {
   addMessage,
   getAllMessages,
   addUser,
+  updatedUsers,
   getAllUsers,
   addCurrentUser,
   getCurrentUser,

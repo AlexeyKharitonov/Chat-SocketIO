@@ -2,13 +2,17 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../Redux/CreateStore";
-import { getAllMessages } from "../../../Redux/Messages/Messages";
-import { userLogout } from "../../../Redux/Users/Users";
+import { getAllMessages } from "../../../Redux/Messages";
+import { userLogout, updateUsers } from "../../../Redux/Users";
 import { useSortMessages } from "../../../Hooks/UseSortMessages";
 import { DropDownSort } from "../DropDownSort";
 import { displayDate } from "../../../Utils/DisplayDate";
-import { completionOfWord } from "../../../Utils/CompletionOfWord";
 import { Button } from "../../Common/Button";
+import io from "socket.io-client";
+import configFile from "../../../config.json";
+import { completionOfWord } from "../../../Utils/CompletionOfWord";
+
+const socket = io(configFile.apiEndpoint);
 
 const ChatMessages = () => {
   const messages = useSelector(getAllMessages());
@@ -16,21 +20,39 @@ const ChatMessages = () => {
     (state: RootState) => state.users.currentUser
   );
 
+  const users = useSelector((state: RootState) => state.users.users);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { sortedMessages, setSortedType } = useSortMessages(messages);
+
+  useEffect(() => {
+    if (!messages.length && !users.length) {
+      navigate("/");
+    }
+  }, [messages, users, navigate]);
 
   useEffect(() => {
     const element = document.querySelector(".scroll-container");
     if (element) element.scrollTop = element.scrollHeight;
   }, [sortedMessages]);
 
-  const users = useSelector((state: RootState) => state.users.users);
+  const handleLogout = () => {
+    socket.emit("user_logout", currentUser?.nickName);
 
-  const handleClick = () => {
     dispatch(userLogout());
     navigate("/");
   };
+
+  useEffect(() => {
+    socket.on("update_users", (updatedUsers) => {
+      dispatch(updateUsers(updatedUsers));
+    });
+
+    return () => {
+      socket.off("update_users");
+    };
+  }, [dispatch]);
 
   return (
     <>
@@ -45,9 +67,9 @@ const ChatMessages = () => {
           </span>
           <Button
             classes={
-              "bg-buttonColor hover:bg-buttonHover text-lg text-buttonTextColor "
+              "bg-buttonColor hover:bg-buttonHover  text-lg text-buttonTextColor "
             }
-            handleClick={handleClick}
+            handleClick={handleLogout}
           >
             Выйти из чата
           </Button>
@@ -66,7 +88,9 @@ const ChatMessages = () => {
               <div
                 key={message.timestamp}
                 className={`flex flex-col mb-5 ${
-                  currentUser ? "items-end" : "items-start"
+                  currentUser?.id === message.sender.id
+                    ? "items-end"
+                    : "items-start"
                 }`}
               >
                 <p className="px-3 font-bold text-sm mb-1 text-[#8A8A8A] ">
@@ -74,7 +98,9 @@ const ChatMessages = () => {
                 </p>
                 <div
                   className={`p-4 ${
-                    currentUser ? "bg-[#9e9797]" : "bg-[#514c4c]"
+                    currentUser?.id === message.sender.id
+                      ? "bg-[#9e9797]"
+                      : "bg-[#514c4c]"
                   } mb-0.5 inline-block text-left word-wrap max-w-[50%] text-white rounded-2xl break-words`}
                 >
                   <p>{message.content}</p>

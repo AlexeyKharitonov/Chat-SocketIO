@@ -1,13 +1,20 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../Redux/CreateStore";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { nanoid } from "nanoid";
-import { addUser, setCurrentUser } from "../../../Redux/Users/Users";
+import { addUser, setCurrentUser, userExist } from "../../../Redux/Users";
 import { IUser, formData } from "../../../Types/index";
 import { Button } from "../../Common/Button";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import io from "socket.io-client";
+import configFile from "../../../config.json";
 import { MAINROOM, nicknameFormRules } from "../../../Constants";
 
+const socket = io(configFile.apiEndpoint);
+
 const NicknameForm = () => {
+  const [newUserNickName, setNewUserNickName] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -15,19 +22,43 @@ const NicknameForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
+    setError,
   } = useForm<formData>({
     mode: "onChange",
   });
 
+  const nickNameValue = watch("nickName");
+
+  useEffect(() => {
+    setNewUserNickName(nickNameValue?.trim());
+  }, [nickNameValue]);
+
+  const userExists = useSelector((state: RootState) =>
+    userExist(newUserNickName)(state)
+  );
+
   const onSubmit: SubmitHandler<formData> = (data: formData) => {
+    if (userExists) {
+      setError("nickName", {
+        type: "custom",
+        message: "Пользователь с таким ником уже существует",
+      });
+      return;
+    }
+
     const user: IUser = {
       id: nanoid(),
       nickName: data.nickName.trim(),
     };
+
+    socket.emit("new_user", user);
     dispatch(addUser(user));
     dispatch(setCurrentUser(user));
+    socket.emit("join", user);
     navigate(`/chat?${MAINROOM}`);
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
