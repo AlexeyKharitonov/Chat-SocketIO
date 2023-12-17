@@ -29,8 +29,6 @@ body {
   background: #7a7aff;
 }
 
-/* ................................... */
-
 .textarea-scroll::-webkit-scrollbar {
   width: 4px;
 }

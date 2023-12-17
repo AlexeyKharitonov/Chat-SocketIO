@@ -1,7 +1,7 @@
-import { CURRENT_USER, MESSAGES_IN_CHAT, USERS_IN_CHAT } from "../Constants";
+import { CURRENT_USER, MESSAGES_IN_CHAT, USERS_IN_CHAT } from "../Constants/";
 import { IMessage, IUser } from "../Types";
 
-const addMessage = (message: IMessage): void => {
+const addMessage = (message: IMessage) => {
   const allMessages = localStorage.getItem(MESSAGES_IN_CHAT);
 
   if (allMessages) {
@@ -13,7 +13,7 @@ const addMessage = (message: IMessage): void => {
   }
 };
 
-const addUser = (user: IUser): void => {
+const addUser = (user: IUser) => {
   const allUsers = localStorage.getItem(USERS_IN_CHAT);
 
   if (allUsers) {
@@ -25,15 +25,19 @@ const addUser = (user: IUser): void => {
   }
 };
 
-const updatedUsers = (updateUsers: IUser[]) =>
-  localStorage.setItem(USERS_IN_CHAT, JSON.stringify(updateUsers));
-
 const getAllMessages = (): IMessage[] | null | undefined => {
   const messagesJson = localStorage.getItem(MESSAGES_IN_CHAT);
   if (messagesJson) {
     return JSON.parse(messagesJson);
   }
 };
+
+const removeAllMessages = () => {
+  localStorage.removeItem(MESSAGES_IN_CHAT);
+};
+
+const updatedUsers = (updateUsers: IUser[]) =>
+  localStorage.setItem(USERS_IN_CHAT, JSON.stringify(updateUsers));
 
 const getAllUsers = (): IUser[] | null | undefined => {
   const usersJson = localStorage.getItem(USERS_IN_CHAT);
@@ -66,6 +70,7 @@ const removeUser = () => {
 export const localStorageService = {
   addMessage,
   getAllMessages,
+  removeAllMessages,
   addUser,
   updatedUsers,
   getAllUsers,

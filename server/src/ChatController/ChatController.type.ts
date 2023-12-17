@@ -1,14 +1,11 @@
 export interface IUser {
   id: string;
-  nickName: null | string;
+  nickName: string;
+  socketId?: string;
 }
 
 export interface IMessage {
   sender: IUser;
   content: string;
-  timestamp: number;
-}
-
-export interface IformData {
-  nickName: string;
+  timestamp: Date;
 }

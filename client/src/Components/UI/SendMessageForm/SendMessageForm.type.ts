@@ -2,4 +2,4 @@ export interface EmojiObject {
   emoji: string;
 }
 
-export type MyEvent = React.FormEvent<HTMLFormElement | HTMLTextAreaElement>;
+export type TEvent = React.FormEvent<HTMLFormElement | HTMLTextAreaElement>;

@@ -5,11 +5,11 @@ import { RootState } from "../../../Redux/CreateStore";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { nanoid } from "nanoid";
 import { addUser, setCurrentUser, userExist } from "../../../Redux/Users";
-import { IUser, formData } from "../../../Types/index";
+import { IUser, IformData } from "../../../Types/index";
 import { Button } from "../../Common/Button";
 import io from "socket.io-client";
 import configFile from "../../../config.json";
-import { MAINROOM, nicknameFormRules } from "../../../Constants";
+import { MAINROOM, nicknameFormRules } from "../../../Constants/";
 
 const socket = io(configFile.apiEndpoint);
 
@@ -24,7 +24,7 @@ const NicknameForm = () => {
     formState: { errors },
     watch,
     setError,
-  } = useForm<formData>({
+  } = useForm<IformData>({
     mode: "onChange",
   });
 
@@ -38,7 +38,7 @@ const NicknameForm = () => {
     userExist(newUserNickName)(state)
   );
 
-  const onSubmit: SubmitHandler<formData> = (data: formData) => {
+  const onSubmit: SubmitHandler<IformData> = (data: IformData) => {
     if (userExists) {
       setError("nickName", {
         type: "custom",

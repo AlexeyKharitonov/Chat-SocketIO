@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../../Redux/CreateStore";
-import { getAllMessages } from "../../../Redux/Messages";
-import { userLogout, updateUsers } from "../../../Redux/Users";
+import { deleteAllMessages, getAllMessages } from "../../../Redux/Messages";
+import {
+  userLogout,
+  updateUsers,
+  getCurrentUser,
+  getAllUsers,
+} from "../../../Redux/Users";
 import { useSortMessages } from "../../../Hooks/UseSortMessages";
 import { DropDownSort } from "../DropDownSort";
 import { displayDate } from "../../../Utils/DisplayDate";
@@ -11,35 +15,31 @@ import { Button } from "../../Common/Button";
 import io from "socket.io-client";
 import configFile from "../../../config.json";
 import { completionOfWord } from "../../../Utils/CompletionOfWord";
+import UseScrollToBottom from "..//.//../../Hooks/useScrollToBottom";
 
 const socket = io(configFile.apiEndpoint);
 
 const ChatMessages = () => {
-  const messages = useSelector(getAllMessages());
-  const currentUser = useSelector(
-    (state: RootState) => state.users.currentUser
-  );
-
-  const users = useSelector((state: RootState) => state.users.users);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const messages = useSelector(getAllMessages);
+  const currentUser = useSelector(getCurrentUser);
+  const users = useSelector(getAllUsers);
+
   const { sortedMessages, setSortedType } = useSortMessages(messages);
 
   useEffect(() => {
-    if (!messages.length && !users.length) {
+    if (!users.length) {
+      dispatch(deleteAllMessages());
       navigate("/");
     }
   }, [messages, users, navigate]);
 
-  useEffect(() => {
-    const element = document.querySelector(".scroll-container");
-    if (element) element.scrollTop = element.scrollHeight;
-  }, [sortedMessages]);
+  UseScrollToBottom(sortedMessages);
 
   const handleLogout = () => {
     socket.emit("user_logout", currentUser?.nickName);
-
     dispatch(userLogout());
     navigate("/");
   };

@@ -1,0 +1,18 @@
+{
+  "name": "socket-chat",
+  "version": "1.0.0",
+  "description": "1. Склонировать репозиторий проекта по ссылке https://github.com/AlexeyKharitonov/Chat-SocketIO на свой компьютер.\r ```\r git clone https://github.com/AlexeyKharitonov/Chat-SocketIO.git\r ```",
+  "main": "App.js",
+  "scripts": {
+    "dev-server": "cd server && npm run dev",
+    "dev-client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run dev-server\" \"npm run dev-client\"",
+    "install": "cd server && npm install && cd ../client && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

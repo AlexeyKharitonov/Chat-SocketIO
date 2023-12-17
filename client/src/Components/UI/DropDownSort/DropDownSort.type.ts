@@ -1,3 +1,5 @@
-export interface SortModalProps {
-  setSortType: (type: string) => void;
+import { Options } from "../../../Constants/";
+
+export interface ISortModal {
+  setSortType: (type: Options) => void;
 }

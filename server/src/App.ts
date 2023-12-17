@@ -2,13 +2,10 @@ import express from "express";
 import { Server } from "socket.io";
 import http from "http";
 import cors from "cors";
-import route from "./route.js";
-import { registerChatHandlers } from "./controllers/ChatController.js";
+import { registerChatHandlers } from "./ChatController/ChatController.js";
+
 const app = express();
-
-app.use(cors({ origin: "*" }));
-app.use(route);
-
+const PORT = 8081;
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -17,11 +14,12 @@ const io = new Server(server, {
   },
 });
 
+app.use(cors({ origin: "*" }));
+
 io.on("connection", (socket) => {
   registerChatHandlers(io, socket);
 });
 
-const PORT = 8081;
-server.listen(PORT || 8081, (): void => {
+server.listen(PORT || 8081, () => {
   console.log(`Server has been started on port ${PORT}`);
 });

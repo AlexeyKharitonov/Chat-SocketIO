@@ -42,4 +42,6 @@ export default usersReducer;
 export const userExist = (nickName: string) => (state: RootState) =>
   state.users.users.some((user) => user.nickName === nickName);
 
-export const getAllUsers = () => (state: RootState) => state.users.users;
+export const getAllUsers = (state: RootState) => state.users.users;
+
+export const getCurrentUser = (state: RootState) => state.users.currentUser;

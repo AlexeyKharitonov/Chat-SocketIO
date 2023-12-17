@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../Redux/CreateStore";
 import io from "socket.io-client";
 import configFile from "../../../config.json";
 import { IMessage } from "../../../Types";
 import { addMessage } from "../../../Redux/Messages";
 import { Button } from "../../Common/Button";
 import EmojiPicker from "emoji-picker-react";
-import { EmojiObject, MyEvent } from "./SendMessageForm.type";
+import { EmojiObject, TEvent } from "./SendMessageForm.type";
 import Emojiicon from "../../../Images/emoji.svg";
 import { IoSend } from "react-icons/io5";
+import { getCurrentUser } from "../../../Redux/Users";
 
 const socket = io(configFile.apiEndpoint);
 
@@ -18,16 +18,14 @@ const SendMessageForm = () => {
   const [messageContent, setMessageContent] = useState("");
   const [isOpen, setOpen] = useState(false);
 
-  const currentUser = useSelector(
-    (state: RootState) => state.users.currentUser
-  );
+  const currentUser = useSelector(getCurrentUser);
 
-  const onEmojiClick = ({ emoji }: EmojiObject): void => {
+  const onEmojiClick = ({ emoji }: EmojiObject) => {
     setMessageContent((prevContent) => `${prevContent} ${emoji}`);
     setOpen(false);
   };
 
-  const handleSubmit = (event: MyEvent) => {
+  const handleSubmit = (event: TEvent) => {
     event.preventDefault();
     if (currentUser) {
       const message: IMessage = {

@@ -16,14 +16,17 @@ const messagesSlice = createSlice({
       state.messages.push(action.payload);
       localStorageService.addMessage(action.payload);
     },
+    deleteAllMessages: (state) => {
+      state.messages = [];
+      localStorageService.removeAllMessages();
+    },
   },
 });
 
 export const {
   reducer: messageReducer,
-  actions: { addMessage },
+  actions: { addMessage, deleteAllMessages },
 } = messagesSlice;
 export default messageReducer;
 
-export const getAllMessages = () => (state: RootState) =>
-  state.messages.messages;
+export const getAllMessages = (state: RootState) => state.messages.messages;

@@ -1,15 +1,17 @@
 import { useState, Fragment, useEffect } from "react";
 import { Dialog, Transition, RadioGroup } from "@headlessui/react";
-import { SortModalProps } from "./DropDownSort.type";
-import { options } from "../../../Constants";
+import { ISortModal } from "./DropDownSort.type";
+import { Options } from "../../../Constants";
 import { FaCheck } from "react-icons/fa";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-const DropDownSort = ({ setSortType }: SortModalProps) => {
+const DropDownSort = ({ setSortType }: ISortModal) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [selectedOption, setSelectedOption] = useState<Options>(
+    Options.OldestFirst
+  );
 
-  const handleSortChange = (option: string) => {
+  const handleSortChange = (option: Options) => {
     setSelectedOption(option);
   };
 
@@ -66,7 +68,7 @@ const DropDownSort = ({ setSortType }: SortModalProps) => {
                     onChange={handleSortChange}
                   >
                     <div className="space-y-2">
-                      {options.map((option, index) => (
+                      {Object.values(Options).map((option, index) => (
                         <RadioGroup.Option
                           key={index}
                           value={option}
@@ -86,12 +88,12 @@ const DropDownSort = ({ setSortType }: SortModalProps) => {
                               </div>
                               {checked && (
                                 <div className="shrink-0 text-white">
-                                  {checked && (
+                                  {
                                     <FaCheck
                                       className="ml-3 shrink-0 text-[#232323] "
                                       size={18}
                                     />
-                                  )}
+                                  }
                                 </div>
                               )}
                             </div>
