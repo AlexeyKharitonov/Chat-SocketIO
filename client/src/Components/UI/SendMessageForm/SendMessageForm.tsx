@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import io from "socket.io-client";
-import configFile from "../../../config.json";
+import EmojiPicker from "emoji-picker-react";
+import { IoSend } from "react-icons/io5";
 import { IMessage } from "../../../Types";
 import { addMessage } from "../../../Redux/Messages";
-import { Button } from "../../Common/Button";
-import EmojiPicker from "emoji-picker-react";
-import { EmojiObject, TEvent } from "./SendMessageForm.type";
-import Emojiicon from "../../../Images/emoji.svg";
-import { IoSend } from "react-icons/io5";
 import { getCurrentUser } from "../../../Redux/Users";
-
-const socket = io(configFile.apiEndpoint);
+import { useSocket } from "../../../Context/UseSecoket";
+import { EmojiObject, TEvent } from "./SendMessageForm.type";
+import { Button } from "../../Common/Button";
+import Emojiicon from "../../../Images/emoji.svg";
 
 const SendMessageForm = () => {
   const dispatch = useDispatch();
+
   const [messageContent, setMessageContent] = useState("");
   const [isOpen, setOpen] = useState(false);
 
   const currentUser = useSelector(getCurrentUser);
+
+  const Socket = useSocket();
 
   const onEmojiClick = ({ emoji }: EmojiObject) => {
     setMessageContent((prevContent) => `${prevContent} ${emoji}`);
@@ -36,18 +36,18 @@ const SendMessageForm = () => {
       if (message.content.length === 0) return;
 
       dispatch(addMessage(message));
-      socket.emit("chat message", message);
+      Socket.emit("chat message", message);
     }
     setMessageContent("");
   };
 
   useEffect(() => {
-    socket.on("chat message", (message) => {
+    Socket.on("chat message", (message) => {
       dispatch(addMessage(message));
     });
 
     return () => {
-      socket.off("chat message");
+      Socket.off("chat message");
     };
   }, [dispatch]);
 

@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useSocket } from "../../../Context/UseSecoket";
 import { RootState } from "../../../Redux/CreateStore";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { nanoid } from "nanoid";
 import { addUser, setCurrentUser, userExist } from "../../../Redux/Users";
 import { IUser, IformData } from "../../../Types/index";
 import { Button } from "../../Common/Button";
-import io from "socket.io-client";
-import configFile from "../../../config.json";
 import { MAINROOM, nicknameFormRules } from "../../../Constants/";
-
-const socket = io(configFile.apiEndpoint);
 
 const NicknameForm = () => {
   const [newUserNickName, setNewUserNickName] = useState("");
@@ -38,6 +35,8 @@ const NicknameForm = () => {
     userExist(newUserNickName)(state)
   );
 
+  const Socket = useSocket();
+
   const onSubmit: SubmitHandler<IformData> = (data: IformData) => {
     if (userExists) {
       setError("nickName", {
@@ -52,10 +51,10 @@ const NicknameForm = () => {
       nickName: data.nickName.trim(),
     };
 
-    socket.emit("new_user", user);
+    Socket.emit("new_user", user);
     dispatch(addUser(user));
     dispatch(setCurrentUser(user));
-    socket.emit("join", user);
+    Socket.emit("join", user);
     navigate(`/chat?${MAINROOM}`);
   };
 

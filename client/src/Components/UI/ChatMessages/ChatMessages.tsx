@@ -8,16 +8,13 @@ import {
   getCurrentUser,
   getAllUsers,
 } from "../../../Redux/Users";
+import { useSocket } from "../../../Context/UseSecoket";
 import { useSortMessages } from "../../../Hooks/UseSortMessages";
 import { DropDownSort } from "../DropDownSort";
 import { displayDate } from "../../../Utils/DisplayDate";
 import { Button } from "../../Common/Button";
-import io from "socket.io-client";
-import configFile from "../../../config.json";
 import { completionOfWord } from "../../../Utils/CompletionOfWord";
-import UseScrollToBottom from "..//.//../../Hooks/useScrollToBottom";
-
-const socket = io(configFile.apiEndpoint);
+import UseScrollToBottom from "../../../Hooks/UseScrollToBottom";
 
 const ChatMessages = () => {
   const dispatch = useDispatch();
@@ -26,6 +23,8 @@ const ChatMessages = () => {
   const messages = useSelector(getAllMessages);
   const currentUser = useSelector(getCurrentUser);
   const users = useSelector(getAllUsers);
+
+  const Socket = useSocket();
 
   const { sortedMessages, setSortedType } = useSortMessages(messages);
 
@@ -39,18 +38,18 @@ const ChatMessages = () => {
   UseScrollToBottom(sortedMessages);
 
   const handleLogout = () => {
-    socket.emit("user_logout", currentUser?.nickName);
+    Socket.emit("user_logout", currentUser?.nickName);
     dispatch(userLogout());
     navigate("/");
   };
 
   useEffect(() => {
-    socket.on("update_users", (updatedUsers) => {
+    Socket.on("update_users", (updatedUsers) => {
       dispatch(updateUsers(updatedUsers));
     });
 
     return () => {
-      socket.off("update_users");
+      Socket.off("update_users");
     };
   }, [dispatch]);
 
